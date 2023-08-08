@@ -2,7 +2,10 @@ package com.example.soundboardapp.ui
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,8 +47,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.soundboardapp.model.Audio
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -68,7 +75,15 @@ fun SoundBoardScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.fillMaxSize()
         ) {
-            Spacer(modifier = modifier.height(200.dp))
+            Spacer(modifier = modifier.height(60.dp))
+            Box(
+                modifier = modifier
+                    .width(100.dp)
+                    .height(100.dp)
+                    .background(Color.Black)
+            )
+            Spacer(modifier = modifier.height(40.dp))
+
             SoundBoard()
         }
 
@@ -95,7 +110,7 @@ fun SoundBoardTopBar(
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text("") },
+        title = { Text("Soundboard #1") },
         modifier = modifier,
         navigationIcon = { BackButton() },
         actions = {
@@ -142,7 +157,6 @@ fun SoundBoardBar(
                     .fillMaxHeight()
                     .fillMaxWidth()
             ) {
-                // Inner content including an icon and a text label
                 Icon(
                     Icons.Filled.Edit,
                     contentDescription = "Edit",
@@ -177,44 +191,101 @@ fun SoundBoardBar(
 fun SoundBoard(
     modifier: Modifier = Modifier
 ) {
-    val data = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+    //val data = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+    val data = listOf(
+        Audio(1),
+        Audio(2),
+        Audio(3),
+        Audio(4),
+        Audio(5),
+        Audio(6),
+        Audio(7),
+        Audio(8),
+        Audio(9),
+        Audio(10),
+        Audio(11),
+        Audio(12)
+    )
     Box(
         modifier = modifier
             .width(375.dp)
             .height(500.dp)
             .clip(RoundedCornerShape(25.dp))
-            .shadow(elevation = 10.dp, spotColor = MaterialTheme.colorScheme.onSurfaceVariant, shape = RoundedCornerShape(25.dp))
+            .shadow(
+                elevation = 10.dp,
+                spotColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                shape = RoundedCornerShape(25.dp)
+            )
             .background(MaterialTheme.colorScheme.onSurfaceVariant),
         contentAlignment = Alignment.TopStart
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(4),
-            contentPadding = PaddingValues(8.dp)
+            columns = GridCells.Fixed(3),
+            contentPadding = PaddingValues(8.dp),
+            userScrollEnabled = false
         ) {
-            items(items = data, key = {dat -> dat}) {
-                dat -> AudioTile()
-
+            /*items(items = data, key = {audio -> audio}) { audio ->
+                AudioTile(audio = Audio(1))
+            } */
+            items(items = data) { audio ->
+                AudioTile(audio = audio)
             }
         }
     }
 }
 
 
+@Composable
+fun SoundBoardIcon() {
+    /*
+    Image(
+        modifier = Modifier
+            .size(64.dp)
+            .padding(8.dp)
+            .clip(RectangleShape),
+        contentScale = ContentScale.Crop,
+        painter = painterResource(),
+        contentDescription = null
+    )
+     */
+}
 
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AudioTile(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    audio: Audio
 ) {
     Card(
+        onClick = {},
         shape = RoundedCornerShape(5.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = if (!audio.empty) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent,
         ),
         modifier = modifier
-            .width(50.dp)
-            .height((96.5).dp)
-            .padding(4.dp)
+            .width(120.dp)
+            .height((120).dp)
+            .padding(4.dp),
+        elevation = CardDefaults.cardElevation(7.dp),
+        border = if (audio.empty) BorderStroke(5.dp, Color.Black) else null
     ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.fillMaxSize()
+
+        ) {
+            if (!audio.empty) {
+                Text(
+                    text = audio.audioName,
+                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+
+        }
 
     }
 }

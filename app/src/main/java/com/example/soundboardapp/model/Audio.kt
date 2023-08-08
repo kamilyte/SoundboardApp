@@ -5,25 +5,18 @@ import android.media.MediaRecorder
 import androidx.compose.ui.graphics.Color
 import java.io.IOException
 
-class AudioTile() {
-    private var fileName: String = ""
-    private var audioName: String = ""
+class Audio(id: Int) {
+    var fileName: String = ""
+    var audioName: String = "Sound #${id}"
 
-    private var recorder: MediaRecorder? = null
-    private var player: MediaPlayer? = null
+    var recorder: MediaRecorder? = null
+    var player: MediaPlayer? = null
 
-    private var backgroundColor: Color? = null
+    var backgroundColor: Color? = null
+    var empty: Boolean = true
 
     //private var permissionToRecordAccepted = false
     //private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
-
-    private fun setAudioName(audioName: String) {
-        this.audioName = audioName
-    }
-
-    private fun setBackgroundColor(backgroundColor: Color) {
-        this.backgroundColor = backgroundColor
-    }
 
     private fun startRecording() {
         recorder = MediaRecorder().apply {
