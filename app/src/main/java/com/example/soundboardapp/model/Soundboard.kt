@@ -3,7 +3,22 @@ package com.example.soundboardapp.model
 class Soundboard(id: Int) {
     val id : Int = id
     var soundboardName : String = "Soundboard #${this.id}"
-    var audioList : MutableList<Audio> = mutableListOf()
+    var audioList : MutableList<Audio> = mutableListOf(
+        Audio(1),
+        Audio(2),
+        Audio(3),
+        Audio(4),
+        Audio(5),
+        Audio(6),
+        Audio(7),
+        Audio(8),
+        Audio(9),
+        Audio(10),
+        Audio(11),
+        Audio(12)
+    )
+
+
 
     private val maxAudio : Int = 12
 

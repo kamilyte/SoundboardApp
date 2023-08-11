@@ -18,6 +18,8 @@ class Audio(id: Int) {
     //private var permissionToRecordAccepted = false
     //private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
 
+
+
     private fun startRecording() {
         recorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -30,9 +32,7 @@ class Audio(id: Int) {
             } catch (e: IOException) {
                 //TODO
             }
-
             start()
-
         }
     }
 

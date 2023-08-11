@@ -52,6 +52,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.window.SecureFlagPolicy
+import com.example.soundboardapp.R
 import com.example.soundboardapp.model.Audio
 
 
@@ -76,21 +80,13 @@ fun SoundBoardScreen(
             modifier = modifier.fillMaxSize()
         ) {
             Spacer(modifier = modifier.height(60.dp))
-            Box(
-                modifier = modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .background(Color.Black)
-            )
+            SoundBoardIcon()
             Spacer(modifier = modifier.height(40.dp))
-
             SoundBoard()
         }
 
     }
 }
-
-
 
 @Composable
 fun BackButton() {
@@ -172,7 +168,6 @@ fun SoundBoardBar(
                     .fillMaxHeight()
                     .fillMaxWidth()
             ) {
-                // Inner content including an icon and a text label
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = "Edit",
@@ -224,9 +219,6 @@ fun SoundBoard(
             contentPadding = PaddingValues(8.dp),
             userScrollEnabled = false
         ) {
-            /*items(items = data, key = {audio -> audio}) { audio ->
-                AudioTile(audio = Audio(1))
-            } */
             items(items = data) { audio ->
                 AudioTile(audio = audio)
             }
@@ -237,17 +229,15 @@ fun SoundBoard(
 
 @Composable
 fun SoundBoardIcon() {
-    /*
     Image(
         modifier = Modifier
-            .size(64.dp)
-            .padding(8.dp)
+            .size(100.dp)
             .clip(RectangleShape),
         contentScale = ContentScale.Crop,
-        painter = painterResource(),
+        painter = painterResource(R.drawable.bella),
         contentDescription = null
     )
-     */
+
 }
 
 
@@ -288,6 +278,28 @@ fun AudioTile(
         }
 
     }
+}
+
+@Preview
+@Composable
+fun DeleteSoundboardPopup() {
+
+    Box(
+        modifier = Modifier
+            .size(300.dp)
+            .background(Color.LightGray, RoundedCornerShape(16.dp))
+    ) {
+        Popup(
+            properties = PopupProperties(
+                focusable = true,
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true
+            )
+        ) {
+
+        }
+    }
+
 }
 
 @Composable
