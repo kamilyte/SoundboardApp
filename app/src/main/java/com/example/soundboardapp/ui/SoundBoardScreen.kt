@@ -145,9 +145,8 @@ fun SoundBoardBar(
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            Button(
+            IconButton(
                 onClick = { /* ... */ },
-                shape = RectangleShape,
                 modifier = modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -160,9 +159,8 @@ fun SoundBoardBar(
                 )
             }
 
-            Button(
+            IconButton(
                 onClick = { /* ... */ },
-                shape = RectangleShape,
                 modifier = modifier
                     .weight(1f)
                     .fillMaxHeight()
