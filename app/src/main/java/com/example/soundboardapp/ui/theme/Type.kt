@@ -8,7 +8,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.soundboardapp.R
 
-val Raleway = FontFamily(Font(R.font.raleway_regular))
+val Raleway = FontFamily(
+    Font(R.font.raleway_regular),
+    Font(R.font.raleway_black, FontWeight.Black),
+    Font(R.font.raleway_bold, FontWeight.Bold)
+    )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -23,6 +27,11 @@ val Typography = Typography(
         fontFamily = Raleway,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = Raleway,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
     )
     /* Other default text styles to override
     titleLarge = TextStyle(
