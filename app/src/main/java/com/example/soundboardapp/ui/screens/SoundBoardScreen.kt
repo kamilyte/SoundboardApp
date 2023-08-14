@@ -1,4 +1,4 @@
-package com.example.soundboardapp.ui
+package com.example.soundboardapp.ui.screens
 
 
 import android.annotation.SuppressLint
@@ -28,7 +28,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,7 +53,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import androidx.compose.ui.window.SecureFlagPolicy
 import com.example.soundboardapp.R
 import com.example.soundboardapp.model.Audio
 

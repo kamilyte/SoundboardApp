@@ -1,5 +1,10 @@
 package com.example.soundboardapp.model
 
+import android.annotation.SuppressLint
+import androidx.annotation.DrawableRes
+import com.example.soundboardapp.R
+
+
 class Soundboard(id: Int) {
     val id : Int = id
     var soundboardName : String = "Soundboard #${this.id}"
@@ -18,7 +23,9 @@ class Soundboard(id: Int) {
         Audio(12)
     )
 
-
+    @SuppressLint("SupportAnnotationUsage")
+    @DrawableRes
+    var imgSrc: Int = R.drawable.placeholder_foreground
 
     private val maxAudio : Int = 12
 

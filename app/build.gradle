@@ -66,4 +66,5 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:23.2.0'
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 }
