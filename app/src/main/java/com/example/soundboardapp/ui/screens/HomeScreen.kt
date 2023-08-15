@@ -1,12 +1,15 @@
 package com.example.soundboardapp.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -115,6 +118,7 @@ fun SoundboardCard(
             .fillMaxWidth()
             .fillMaxHeight(1 / 9f)
             .padding(4.dp)
+            .clickable {}
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -161,7 +165,7 @@ fun HomeTopBar(
 
             ) {
                 SearchBar(homeViewModel, homeUiState)
-                AddSoundboardButton()
+                AddSoundboardButton { homeViewModel.onAddClick() }
             }
         },
         colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.onPrimary)
@@ -269,9 +273,11 @@ fun SearchBar(
 }
 
 @Composable
-fun AddSoundboardButton() {
+fun AddSoundboardButton(
+    onAddClick: () -> Unit
+) {
     IconButton(
-        onClick = {},
+        onClick = onAddClick,
     ) {
         Icon(
             Icons.Outlined.Add,

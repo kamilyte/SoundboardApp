@@ -10,13 +10,15 @@ import com.example.soundboardapp.model.Soundboard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class HomeViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    private var soundboardList: MutableList<Soundboard> = _uiState.value.soundboardList
+    private var soundboardList: List<Soundboard> = _uiState.value.soundboardList
+    private var mutableSoundboardList: MutableList<Soundboard> = soundboardList.toMutableList()
     var searchText: String by mutableStateOf("")
         private set
     var searchResults: List<Soundboard> by mutableStateOf(listOf())
@@ -40,6 +42,19 @@ class HomeViewModel : ViewModel() {
         searchResults = listOf()
         searchText = ""
         activeSearch = false
+    }
+
+    fun onAddClick() {
+        mutableSoundboardList.add(Soundboard(8))
+        updateHomeState()
+    }
+
+    private fun updateHomeState() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                soundboardList = mutableSoundboardList.toList()
+            )
+        }
     }
 
 }
