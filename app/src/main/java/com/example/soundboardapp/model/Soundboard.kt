@@ -6,6 +6,7 @@ import com.example.soundboardapp.R
 
 
 class Soundboard(id: Int) {
+    private val maxAudio : Int = 12
     val id : Int = id
     var soundboardName : String = "Soundboard #${this.id}"
     var audioList : MutableList<Audio> = mutableListOf(
@@ -26,8 +27,6 @@ class Soundboard(id: Int) {
     @SuppressLint("SupportAnnotationUsage")
     @DrawableRes
     var imgSrc: Int = R.drawable.placeholder_foreground
-
-    private val maxAudio : Int = 12
 
     fun addAudio(audio: Audio) {
         if (audioList.size < maxAudio) {

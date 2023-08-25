@@ -55,12 +55,16 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.example.soundboardapp.R
 import com.example.soundboardapp.model.Audio
+import com.example.soundboardapp.model.Soundboard
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoundBoardScreen(
+    soundboard: Soundboard,
+    onCancelButtonClicked: () -> Unit,
+    onDeleteButtonClicked: (Soundboard) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -68,7 +72,11 @@ fun SoundBoardScreen(
             SoundBoardBar()
         },
         topBar = {
-            SoundBoardTopBar()
+            SoundBoardTopBar(
+                soundboard = soundboard,
+                onCancelButtonClicked = onCancelButtonClicked,
+                onDeleteButtonClicked = onDeleteButtonClicked
+            )
         },
         containerColor = MaterialTheme.colorScheme.onPrimary
     ) {
@@ -80,16 +88,18 @@ fun SoundBoardScreen(
             Spacer(modifier = modifier.height(60.dp))
             SoundBoardIcon()
             Spacer(modifier = modifier.height(40.dp))
-            SoundBoard()
+            SoundBoard(soundboard)
         }
 
     }
 }
 
 @Composable
-fun BackButton() {
+fun BackButton(
+    onCancelButtonClicked: () -> Unit
+) {
     TextButton(
-        onClick = {},
+        onClick = onCancelButtonClicked,
     ) {
         Icon(
             Icons.Filled.ArrowBack,
@@ -101,14 +111,20 @@ fun BackButton() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoundBoardTopBar(
+    soundboard: Soundboard,
+    onCancelButtonClicked: () -> Unit,
+    onDeleteButtonClicked: (Soundboard) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = { Text("Soundboard #1") },
         modifier = modifier,
-        navigationIcon = { BackButton() },
+        navigationIcon = { BackButton(onCancelButtonClicked = onCancelButtonClicked) },
         actions = {
-            SoundBoardDelete()
+            SoundBoardDelete(
+                soundboard = soundboard,
+                onDeleteButtonClicked = onDeleteButtonClicked
+            )
         },
         colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.onPrimary)
     )
@@ -116,10 +132,12 @@ fun SoundBoardTopBar(
 
 @Composable
 fun SoundBoardDelete(
+    soundboard: Soundboard,
+    onDeleteButtonClicked: (Soundboard) -> Unit,
     modifier: Modifier = Modifier
 ) {
     IconButton(
-        onClick = {},
+        onClick = { onDeleteButtonClicked(soundboard) },
     ) {
         Icon(
             Icons.Outlined.Delete,
@@ -144,7 +162,7 @@ fun SoundBoardBar(
                 .fillMaxHeight()
         ) {
             IconButton(
-                onClick = { /* ... */ },
+                onClick = { },
                 modifier = modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -158,7 +176,7 @@ fun SoundBoardBar(
             }
 
             IconButton(
-                onClick = { /* ... */ },
+                onClick = { },
                 modifier = modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -166,7 +184,7 @@ fun SoundBoardBar(
             ) {
                 Icon(
                     Icons.Filled.Add,
-                    contentDescription = "Edit",
+                    contentDescription = "Add",
                     modifier = Modifier.size(40.dp)
                 )
             }
@@ -177,26 +195,12 @@ fun SoundBoardBar(
 
 
 
-@Preview
+
 @Composable
 fun SoundBoard(
+    soundboard: Soundboard,
     modifier: Modifier = Modifier
 ) {
-    //val data = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-    val data = listOf(
-        Audio(1),
-        Audio(2),
-        Audio(3),
-        Audio(4),
-        Audio(5),
-        Audio(6),
-        Audio(7),
-        Audio(8),
-        Audio(9),
-        Audio(10),
-        Audio(11),
-        Audio(12)
-    )
     Box(
         modifier = modifier
             .width(375.dp)
@@ -215,7 +219,7 @@ fun SoundBoard(
             contentPadding = PaddingValues(8.dp),
             userScrollEnabled = false
         ) {
-            items(items = data) { audio ->
+            items(items = soundboard.audioList) { audio ->
                 AudioTile(audio = audio)
             }
         }
@@ -307,5 +311,5 @@ fun SoundBoardSelectedDot() {
 @Preview
 @Composable
 fun SoundBoardPreview() {
-    SoundBoardScreen()
+    SoundBoardScreen(soundboard = Soundboard(0), {}, {})
 }

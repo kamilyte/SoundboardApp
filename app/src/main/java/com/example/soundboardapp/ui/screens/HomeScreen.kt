@@ -1,8 +1,6 @@
 package com.example.soundboardapp.ui.screens
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.animation.AnimatedVisibility
@@ -11,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -58,59 +57,144 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.soundboardapp.R
 import com.example.soundboardapp.model.Soundboard
 import com.example.soundboardapp.ui.viewmodel.HomeUiState
 import com.example.soundboardapp.ui.viewmodel.HomeViewModel
 
+enum class SoundboardScreen() {
+    Home,
+    Soundboard,
+    Settings,
+    Request
+}
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Composable
+fun StartScreen(
+    homeViewModel: HomeViewModel = viewModel(),
+    navController: NavHostController = rememberNavController()
+) {
+    val homeUiState by homeViewModel.uiState.collectAsState()
+
+    Scaffold() { innerPadding ->
+
+        NavHost(
+            navController = navController,
+            startDestination = SoundboardScreen.Home.name,
+        ) {
+            composable(route = SoundboardScreen.Home.name) {
+                HomeScreen(
+                    activeSearch = homeViewModel.activeSearch,
+                    soundboardList = homeUiState.soundboardList,
+                    searchResults = homeViewModel.searchResults,
+                    onNextButtonClicked = {
+                        homeViewModel.onSoundboardClick(it)
+                        navController.navigate(SoundboardScreen.Soundboard.name)
+                    },
+                    homeViewModel = homeViewModel
+                )
+            }
+            composable(route = SoundboardScreen.Soundboard.name) {
+                SoundBoardScreen(
+                    soundboard = homeUiState.currentSoundboard,
+                    onCancelButtonClicked = {
+                        homeViewModel.onCancelClick()
+                        navController.popBackStack(SoundboardScreen.Home.name, inclusive = false)
+                    },
+                    onDeleteButtonClicked = {
+                        homeViewModel.onDeleteClick(it)
+                        navController.popBackStack(SoundboardScreen.Home.name, inclusive = false)
+                    }
+                )
+            }
+        }
+
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = viewModel()
+    activeSearch: Boolean,
+    soundboardList: List<Soundboard>,
+    searchResults: List<Soundboard>,
+    onNextButtonClicked: (Soundboard) -> Unit,
+    homeViewModel: HomeViewModel
 ) {
     val homeUiState by homeViewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = { HomeTopBar(homeViewModel, homeUiState) },
         bottomBar = { HomeBottomBar() },
-    ) { it ->
-        LazyColumn(
-            contentPadding = it
-        ) {
-            if (!homeViewModel.activeSearch) {
-                items(homeUiState.soundboardList) { soundboard ->
-                    SoundboardCard(soundboard)
+    ) { innerPadding ->
+
+        HomeContentScreen(
+            innerPadding = innerPadding,
+            activeSearch = activeSearch,
+            soundboardList = soundboardList,
+            searchResults = searchResults,
+            onNextButtonClicked = onNextButtonClicked
+        )
+    }
+}
+
+@Composable
+fun HomeContentScreen(
+    innerPadding: PaddingValues,
+    activeSearch: Boolean,
+    soundboardList: List<Soundboard>,
+    searchResults: List<Soundboard>,
+    onNextButtonClicked: (Soundboard) -> Unit
+) {
+    LazyColumn(
+        contentPadding = innerPadding
+    ) {
+        if (!activeSearch) {
+            items(soundboardList) { soundboard ->
+                SoundboardCard(
+                    soundboard = soundboard,
+                    onSoundboardClick = onNextButtonClicked
+                )
+            }
+        } else {
+            if (searchResults.isNotEmpty()) {
+                item {
+                    Text(
+                        "Results",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+                items(searchResults) { soundboard ->
+                    SoundboardCard(
+                        soundboard = soundboard,
+                        onSoundboardClick = onNextButtonClicked
+                    )
                 }
             } else {
-                if (homeViewModel.searchResults.isNotEmpty()) {
-                    item {
-                        Text(
-                            "Results",
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                    items(homeViewModel.searchResults) { soundboard ->
-                        SoundboardCard(soundboard)
-                    }
-                } else {
-                    item {
-                        Text("No matches found")
-                    }
+                item {
+                    Text("No matches found")
                 }
             }
-
         }
+
     }
 }
 
 
 @Composable
 fun SoundboardCard(
-    soundboard: Soundboard
+    soundboard: Soundboard,
+    onSoundboardClick: (Soundboard) -> Unit
 ) {
     Card(
         shape = RectangleShape,
@@ -118,7 +202,9 @@ fun SoundboardCard(
             .fillMaxWidth()
             .fillMaxHeight(1 / 9f)
             .padding(4.dp)
-            .clickable {}
+            .clickable(
+                onClick = { onSoundboardClick(soundboard) }
+            )
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -291,5 +377,5 @@ fun AddSoundboardButton(
 @Preview
 @Composable
 fun test() {
-    HomeScreen()
+    StartScreen()
 }

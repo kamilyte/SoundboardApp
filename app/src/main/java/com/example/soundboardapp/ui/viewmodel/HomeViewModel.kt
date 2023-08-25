@@ -49,10 +49,31 @@ class HomeViewModel : ViewModel() {
         updateHomeState()
     }
 
+    fun onDeleteClick(soundboard: Soundboard) {
+        mutableSoundboardList.remove(soundboard)
+        updateHomeState()
+    }
+
+    fun onCancelClick() {
+        updateCurrentSoundboardState(Soundboard(0))
+    }
+
+    fun onSoundboardClick(soundboard: Soundboard) {
+        updateCurrentSoundboardState(soundboard)
+    }
+
     private fun updateHomeState() {
         _uiState.update { currentState ->
             currentState.copy(
                 soundboardList = mutableSoundboardList.toList()
+            )
+        }
+    }
+
+    private fun updateCurrentSoundboardState(soundboard: Soundboard) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                currentSoundboard = soundboard
             )
         }
     }

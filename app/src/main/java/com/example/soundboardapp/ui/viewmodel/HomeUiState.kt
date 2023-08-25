@@ -11,5 +11,6 @@ data class HomeUiState (
         Soundboard(5),
         Soundboard(6),
         Soundboard(7),
-    )
+    ),
+    val currentSoundboard: Soundboard = Soundboard(0)
 )
